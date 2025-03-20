@@ -3,7 +3,7 @@ version: 2.1
 executors:
   docker-executor:
     docker:
-      - image: cimg/node:20  # ✅ Correct image for CircleCI
+      - image: cimg/node:lts  # ✅ Correct image for CircleCI
 
 jobs:
   build:
