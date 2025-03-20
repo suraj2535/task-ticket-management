@@ -3,7 +3,7 @@ version: 2.1
 executors:
   docker-executor:
     docker:
-      - image: circleci/node:20  # Use latest Node.js LTS
+      - image: cimg/node:20  # ✅ Correct image for CircleCI
 
 jobs:
   build:
