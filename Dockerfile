@@ -1,28 +1,25 @@
-# Base image
 FROM node:18
 
-# Set working directory
 WORKDIR /app
 
-# Copy package files
+# Copy root package files
 COPY package*.json ./
 
-# Install dependencies for both frontend and backend
+# Install dependencies
 RUN npm install
 
-# Copy project files
+# Copy all files
 COPY . .
 
-# Build frontend
+# Install and build frontend
 WORKDIR /app/frontend
-RUN npm install
-RUN npm run build
+RUN npm install --legacy-peer-deps
+RUN CI=true npm run build
 
-# Switch to backend directory
+# Switch to backend
 WORKDIR /app/backend
+RUN npm install
 
-# Expose port
 EXPOSE 5001
 
-# Start the application
 CMD ["npm", "start"]
