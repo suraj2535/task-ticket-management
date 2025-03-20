@@ -8,10 +8,10 @@ executors:
 jobs:
   build:
     executor: docker-executor
+    resource_class: medium  # Ensure sufficient resources
     steps:
       - checkout  # Clone the latest code
-      - setup_remote_docker:  # Enable Docker
-          version: 20.10.7
+      - setup_remote_docker  # Enable Docker without specifying version
       - run:
           name: Build Backend Image
           command: docker build -t surajshaikh/ticket-management-backend ./backend
@@ -30,10 +30,10 @@ jobs:
 
   test:
     executor: docker-executor
+    resource_class: medium
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.7
+      - setup_remote_docker  # Removed version specification
       - run:
           name: Start Services with Docker Compose
           command: docker-compose up -d
