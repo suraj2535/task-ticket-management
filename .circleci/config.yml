@@ -1,17 +1,26 @@
 version: 2.1
 
 executors:
-  node-executor:
+  docker-executor:
     docker:
-      - image: circleci/node:14
+      - image: circleci/node:20  # Latest Node.js LTS image
 
 jobs:
   build:
-    executor: node-executor
+    executor: docker-executor
     steps:
-      - checkout
-      - run: npm install
-      - run: npm test
+      - checkout  # Clone the latest code from GitHub
+      - setup_remote_docker:  # Enable Docker in CircleCI
+          version: 20.10.7
+      - run:
+          name: Install Dependencies
+          command: npm install
+      - run:
+          name: Run Linting
+          command: npm run lint
+      - run:
+          name: Run Tests
+          command: npm test
 
 workflows:
   version: 2
