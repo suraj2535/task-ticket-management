@@ -14,7 +14,7 @@ jobs:
       - setup_remote_docker  # Enable Docker without specifying version
       - run:
           name: Build Backend Image
-          command: docker build -t surajshaikh/ticket-management-backend ./backend
+          command: docker build -t surajshaikh/ticket-management-backend .
       - run:
           name: Build Frontend Image
           command: docker build -t surajshaikh/ticket-management-frontend ./frontend
