@@ -1,63 +1,27 @@
 version: 2.1
 
-executors:
-  docker-executor:
-    docker:
-      - image: cimg/node:lts  # ✅ Correct image for CircleCI
-
 jobs:
   build:
-    executor: docker-executor
-    resource_class: medium  # Ensure sufficient resources
-    steps:
-      - checkout  # Clone the latest code
-      
-      - run:
-          name: "Debug: List Project Files"
-          command: ls -R
-
-      - setup_remote_docker  # Enable Docker without specifying version
-      
-      - run:
-          name: Build Backend Image
-          command: docker build -t surajshaikh/ticket-management-backend .
-      - run:
-          name: Build Frontend Image
-          command: docker build -t surajshaikh/ticket-management-frontend -f ./frontend/Dockerfile ./frontend
-      - run:
-          name: Login to Docker Hub
-          command: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-      - run:
-          name: Push Backend Image to Docker Hub
-          command: docker push surajshaikh/ticket-management-backend
-      - run:
-          name: Push Frontend Image to Docker Hub
-          command: docker push surajshaikh/ticket-management-frontend
-
-  test:
-    executor: docker-executor
-    resource_class: medium
+    docker:
+      - image: cimg/node:18.16
     steps:
       - checkout
-      - setup_remote_docker  # Removed version specification
+      - setup_remote_docker
       - run:
-          name: Start Services with Docker Compose
-          command: docker-compose up -d
+          name: Build Docker image
+          command: docker build -t ticket-management .
       - run:
-          name: Wait for Backend to Start
-          command: sleep 10  # Wait for backend & DB to be ready
-      - run:
-          name: Run Backend Tests
-          command: docker exec $(docker ps -qf "name=backend") npm test
-      - run:
-          name: Stop Services
-          command: docker-compose down
+          name: Run tests
+          command: |
+            cd frontend
+            npm install
+            npm test
+            cd ../backend
+            npm install
+            npm test
 
 workflows:
   version: 2
-  build_and_test:
+  build-and-test:
     jobs:
       - build
-      - test:
-          requires:
-            - build
