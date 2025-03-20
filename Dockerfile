@@ -2,24 +2,27 @@ FROM node:18
 
 WORKDIR /app
 
-# Copy root package files
+# Copy package files
 COPY package*.json ./
+COPY frontend/package*.json ./frontend/
+COPY backend/package*.json ./backend/
 
 # Install dependencies
-RUN npm install
-
-# Copy all files
-COPY . .
-
-# Install and build frontend
 WORKDIR /app/frontend
 RUN npm install --legacy-peer-deps
-RUN CI=true npm run build
 
-# Switch to backend
 WORKDIR /app/backend
 RUN npm install
 
+# Copy all files
+WORKDIR /app
+COPY . .
+
+# Build frontend
+WORKDIR /app/frontend
+RUN CI=true npm run build
+
 EXPOSE 5001
 
+WORKDIR /app/backend
 CMD ["npm", "start"]
