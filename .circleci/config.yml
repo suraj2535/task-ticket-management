@@ -11,10 +11,13 @@ jobs:
     resource_class: medium  # Ensure sufficient resources
     steps:
       - checkout  # Clone the latest code
-      - setup_remote_docker  # Enable Docker without specifying version
+      
       - run:
           name: Debug: List Project Files
           command: ls -R
+
+      - setup_remote_docker  # Enable Docker without specifying version
+      
       - run:
           name: Build Backend Image
           command: docker build -t surajshaikh/ticket-management-backend .
