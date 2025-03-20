@@ -1,17 +1,30 @@
-version: "3"
 services:
   backend:
-    build: .
+    image: surajshaikh/ticket-management-backend
     ports:
-      - "5000:5000"
+      - "5001:5001"
     environment:
       - NODE_ENV=production
+      - MONGO_URI=mongodb+srv://suraj2535:suraj2535@cluster0.5c0fm.mongodb.net/ticketDB?retryWrites=true&w=majority
+      - JWT_SECRET=9e9fc9866f830ba3e408bfaaaaadf7d7b395d785c6cb6343d2252d88e9d3d69f
+    depends_on:
+      - mongodb
     restart: always
 
   frontend:
-    build: ./frontend
+    image: surajshaikh/ticket-management-frontend
     ports:
-      - "3000:80"
+      - "3001:80"
     depends_on:
       - backend
     restart: always
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
