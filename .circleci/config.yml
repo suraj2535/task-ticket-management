@@ -13,7 +13,7 @@ jobs:
       - checkout  # Clone the latest code
       
       - run:
-          name: Debug: List Project Files
+          name: "Debug: List Project Files"
           command: ls -R
 
       - setup_remote_docker  # Enable Docker without specifying version
