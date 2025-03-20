@@ -13,11 +13,14 @@ jobs:
       - checkout  # Clone the latest code
       - setup_remote_docker  # Enable Docker without specifying version
       - run:
+          name: Debug: List Project Files
+          command: ls -R
+      - run:
           name: Build Backend Image
           command: docker build -t surajshaikh/ticket-management-backend .
       - run:
           name: Build Frontend Image
-          command: docker build -t surajshaikh/ticket-management-frontend -f ./frontend/Dockerfile ./frontend
+          command: docker build -t surajshaikh/ticket-management-frontend -f frontend/Dockerfile frontend
       - run:
           name: Login to Docker Hub
           command: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
